@@ -1,0 +1,39 @@
+<p style="color: green"><%= notice %></p>
+<div class="d-flex justify-content-end me-5">
+<%= link_to "Nuevo producto", new_product_path, class: "btn btn-primary"%>
+<%= link_to "Cerrar sesion", destroy_user_session_path, class: "btn btn-primary", data: {turbo_method: :delete}%> 
+</div>
+
+<h1>Products</h1>
+
+<div class='d-flex ms-5'>
+      <div class="table-responsive">
+        <table class="table dataTablep border-table table-width m-0"  id="dataTablep" style="overflow-wrap:break-word;width:100%">
+          <thead>
+            <tr>
+              <th class="text-center border-bottom active">Nombrel</th>
+              <th class="text-center border-bottom active">Descripción</th>
+              <th class="text-center border-bottom active">Precio</th>
+              <th class="text-center border-bottom active">Ver</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each do |product| %>
+              <tr>
+                <td><%= product.name %></td>
+                <td><%= product.description %></td>
+                <td><%= product.price %></td>
+                <td><%= link_to "Ver", product, class: "btn btn-primary" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+<script type="text/javascript">
+//$(document).find('#dataTablep').DataTable({paging:true})
+$(document).ready(function() { $('#dataTablep').DataTable();});
+//var $j = $.noConflict();
+//$j(document).ready(function() {$j('#dataTablep').DataTable();});
+</script>
