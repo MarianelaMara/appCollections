@@ -1,0 +1,25 @@
+<div id="<%= dom_id collection %>" class="card">
+  <div class="card-body">
+    <h5 class="card-title"><%= collection.name %></h5>
+    <p class="card-text">
+      <strong>Owner:</strong>
+      <%= collection.owner %>
+    </p>
+    <p class="card-text">
+      <strong>Manufacturing lead time:</strong>
+      <%= collection.manufacturing_lead_time %>
+    </p>
+    <p class="card-text">
+      <strong>Estimated release date:</strong>
+      <%= collection.estimated_release_date %>
+    </p>
+    <p class="card-text">
+      <strong>Articulos:</strong>
+      <ul class="list-group list-group-flush">
+        <% collection.articles.each do |article| %>
+          <li class="list-group-item"><%= article.model %> <%= link_to "Ver articulo", collection_article_path(collection, article), class: "btn btn-primary" %></li>
+        <% end %>
+      </ul>
+    </p>
+  </div>
+</div>

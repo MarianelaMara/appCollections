@@ -1,0 +1,39 @@
+<%= form_with(model: article, url: collection_articles_path(@collection)) do |form| %>
+  <% if article.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+      <ul>
+        <% article.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+ 
+
+  <div>
+    <%= form.label :model, style: "display: block" %>
+    <%= form.text_field :model %>
+  </div>
+
+  <div>
+    <%= form.label :category_id, "Categoria", style: "display: block" %>
+    <%= form.select :category_id, Category.all.pluck(:name, :id), {} %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :material_ids, "Materiales", style: "display: block" %>
+    <%= form.select :material_ids, Material.all.pluck(:name, :id), {}, {multiple: true, size: 5} %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

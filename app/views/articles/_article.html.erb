@@ -1,0 +1,32 @@
+<div id="<%= dom_id article %>">
+
+  <p>
+  <strong>Coleccion:</strong>
+  <%= article.collection.try(:name) %>
+  </p>
+
+  <p>
+    <strong>Model:</strong>
+    <%= article.model %>
+  </p>
+
+  <p>
+    <strong>Category:</strong>
+    <%= article.category.try(:name) %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= article.description %>
+  </p>
+
+  <p>
+    <strong>Materiales:</strong>
+    <ul>
+      <% article.materials.each do |material| %>
+        <li><%= material.name %></li>
+      <% end %>
+    </ul>
+  </p>
+
+</div>
