@@ -1,13 +1,13 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Colecciones</h1>
+<h1 class="display-4 text-center text-gray-800"> <%= t('.collection') %></h1>
 
-<div id="collections">
-  <table class="table table-striped">
+<div id="collections" class="container mt-4">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Acciones</th>
+        <th><%= t('.name') %></th>
+        <th><%= t('.actions') %></th>
       </tr>
     </thead>
     <tbody>
@@ -15,13 +15,13 @@
         <tr>
           <td><%= collection.name %></td>
           <td>
-            <%= link_to "Ver colección", collection, class: "btn btn-primary" %>
-            <%= link_to "Editar colección", edit_collection_path(collection), class: "btn btn-secondary" %>
-            <%= link_to "Eliminar colección", collection, method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
+            <%= link_to t('.view'), collection, class: "btn btn-primary" %>
+            <%= link_to t('.editar'), edit_collection_path(collection), class: "btn btn-secondary" %>
+            <%= link_to t('.delete'), collection, method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <%= link_to "Nueva colección", new_collection_path, class: "btn btn-success" %>
+  <%= link_to t('.new'), new_collection_path, class: "btn btn-success" %>
 </div>

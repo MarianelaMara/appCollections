@@ -1,9 +1,9 @@
-<h1>New article</h1>
-
+<div>
+    <h1><%= t('.new') %></h1>
+    <%= link_to t('.goback'), @collection, class: "btn btn-success" %>
+</div>
 <%= render "form", article: @article %>
 
 <br>
 
-<div>
- <%= link_to "Volver a coleción", @collection %>
-</div>
+

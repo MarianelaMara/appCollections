@@ -1,0 +1,47 @@
+ es:
+  collections:
+    index:
+      collection: "Colecciones"
+      name: "Nombre"
+      actions: "Acciones"
+      view: "Ver"
+      edit: "Modificar"
+      delete: "Borrar"
+      new: "Nueva colección"
+    collection:
+      owner: "Owner: "
+      manufacturing_lead_time: "Plazo de fabricación: "
+      estimated_release_date: "Fecha estimada de lanzamiento: "
+      edit: "Editar colección"
+      delete: "Eliminar colección"
+      add: "Agregar artículo"
+      articles: "Artículos"
+      actions: "Acciones"
+      view: "Ver artículo"
+    edit:
+      edit: "Editar colección"
+    form:
+      name: "Nombre"
+      manufacturing_lead_time: "Plazo de fabricación (en días)"
+      estimated_release_date: "Fecha estimada de lanzamiento"
+  articles:
+    new:
+      new: "Nuevo artículo"
+      goback: "Volver a la colección"
+    form:
+      model: "Modelo"
+      category_id: "Categoría"
+      description: "Descripción"
+      material_ids: "Materiales"
+    show:
+      edit: "Editar"
+      delete: "Eliminar"
+    article:
+      collection: "Colección: "
+      model: "Modelo: "
+      category: "Categoría: "
+      description: "Descripción: "
+      materials: "Materiales: "
+    edit:
+      edit: "Editar artículo"
+      goback: "Volver a colecciones"

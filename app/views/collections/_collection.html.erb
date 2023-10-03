@@ -1,25 +1,42 @@
-<div id="<%= dom_id collection %>" class="card">
+<div class="card">
   <div class="card-body">
-    <h5 class="card-title"><%= collection.name %></h5>
+    <h5 class="card-title"><%= @collection.name %></h5>
+    <div class=" justify-content-md-start">
     <p class="card-text">
-      <strong>Owner:</strong>
-      <%= collection.owner %>
+      <strong><%= t('.owner') %></strong>
+      <%= @collection.owner %>
     </p>
     <p class="card-text">
-      <strong>Manufacturing lead time:</strong>
-      <%= collection.manufacturing_lead_time %>
+      <strong><%= t('.manufacturing_lead_time') %></strong>
+      <%= @collection.manufacturing_lead_time %>
     </p>
     <p class="card-text">
-      <strong>Estimated release date:</strong>
-      <%= collection.estimated_release_date %>
+      <strong><%= t('.estimated_release_date') %></strong>
+      <%= @collection.estimated_release_date %>
     </p>
-    <p class="card-text">
-      <strong>Articulos:</strong>
-      <ul class="list-group list-group-flush">
-        <% collection.articles.each do |article| %>
-          <li class="list-group-item"><%= article.model %> <%= link_to "Ver articulo", collection_article_path(collection, article), class: "btn btn-primary" %></li>
-        <% end %>
-      </ul>
-    </p>
+      </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= link_to t('.edit'), edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 
+      <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
+      <%= link_to  t('.add'), new_collection_article_path(@collection), method: :post, class: "btn btn-success me-md-2" %>
+    </div>
+      <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= t('.articles') %></th>
+        <th><%= t('.actions') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.articles.each do |article| %>
+        <tr>
+          <td><%= article.model %></td>
+          <td>
+           <li class="list-group-item"> <%= link_to t('.view') , collection_article_path(@collection, article), class: "btn btn-primary" %></li>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
   </div>
 </div>

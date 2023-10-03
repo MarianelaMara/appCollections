@@ -1,6 +1,7 @@
+<div id="collections" class="container mt-4">
 <%= form_with(model: collection) do |form| %>
   <% if collection.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(collection.errors.count, "error") %> prohibited this collection from being saved:</h2>
 
       <ul>
@@ -11,21 +12,22 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label t('.name') , class: "form-label" %>
+    <%= form.text_field :name, class: "form-control form-control-blue-100" %>
   </div>
 
-  <div>
-    <%= form.label :manufacturing_lead_time, style: "display: block" %>
-    <%= form.number_field :manufacturing_lead_time %>
+  <div class="mb-3">
+    <%= form.label  t('.manufacturing_lead_time'), class: "form-label" %>
+    <%= form.number_field :manufacturing_lead_time, class: "form-control form-control-pink-100" %>
   </div>
 
-  <div>
-    <%= form.label :estimated_release_date, style: "display: block" %>
-    <%= form.date_field :estimated_release_date %>
+  <div class="mb-3">
+    <%= form.label t('.estimated_release_date'), class: "form-label" %>
+    <%= form.date_field :estimated_release_date, class: "form-control form-control-green-100" %>
   </div>
-  <div>
-    <%= form.submit %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <%= form.submit "Guardar cambios", class: "btn btn-primary" %>
   </div>
-<% end %> 
+<% end %>
+</div>

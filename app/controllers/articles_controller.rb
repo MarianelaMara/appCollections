@@ -41,9 +41,11 @@ class ArticlesController < ApplicationController
 
   # PATCH/PUT /articles/1 or /articles/1.json
   def update
+    @collection = Collection.find(params[:collection_id])    
     respond_to do |format|
       if @article.update(article_params)
-        format.html { redirect_to article_url(@article), notice: "Article was successfully updated." }
+        #@article.photos.append(article_params[:photos])
+        format.html { redirect_to collection_article_path(@collection, @article), notice: "Se modifico exitosamente." }
         format.json { render :show, status: :ok, location: @article }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -69,6 +71,6 @@ class ArticlesController < ApplicationController
     end
 
   def article_params
-    params.require(:article).permit(:model, :description, :category_id, :collection_id, material_ids: [])
+    params.require(:article).permit(:model, :description, :category_id, :collection_id, material_ids: [], photos: [])
   end
 end

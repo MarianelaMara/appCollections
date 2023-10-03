@@ -1,5 +1,5 @@
-<%= form_with(model: article, url: collection_articles_path(@collection)) do |form| %>
 
+<%= form_with(model: [@collection, @article]) do |form| %>
   <% if article.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
@@ -42,5 +42,4 @@
     <%= form.submit "Guardar cambios", class: "btn btn-primary" %>
  </div>
 </div>
-
 <% end %>

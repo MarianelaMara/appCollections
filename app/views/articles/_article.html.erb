@@ -1,32 +1,47 @@
-<div id="<%= dom_id article %>">
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title"><%= "Artículo" %></h5>
+    <div class=" justify-content-md-start">
 
-  <p>
-  <strong>Coleccion:</strong>
-  <%= article.collection.try(:name) %>
-  </p>
+      <p class="card-text">
+        <strong><%= t('.collection') %></strong>
+        <%= article.collection.try(:name) %>
+      </p>
 
-  <p>
-    <strong>Model:</strong>
-    <%= article.model %>
-  </p>
+      <p class="card-text">
+        <strong><%= t('.model') %></strong>
+        <%= article.model %>
+      </p>
 
-  <p>
-    <strong>Category:</strong>
-    <%= article.category.try(:name) %>
-  </p>
+      <p class="card-text">
+        <strong><%= t('.category') %></strong>
+        <%= article.category.try(:name) %>
+      </p>
 
-  <p>
-    <strong>Description:</strong>
-    <%= article.description %>
-  </p>
-
-  <p>
-    <strong>Materiales:</strong>
-    <ul>
-      <% article.materials.each do |material| %>
-        <li><%= material.name %></li>
+      <p class="card-text">
+        <strong><%= t('.description') %></strong>
+        <%= article.description %>
+      </p>
+      <% article.photos.each do |photo| %> <img src="<%= url_for(photo) %>"> 
       <% end %>
-    </ul>
-  </p>
 
+      <p class="card-text">
+        <strong><%= t('.materials') %></strong>
+      </p>
+    </div>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%=  %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% article.materials.each do |material| %>
+          <tr>
+            <td><%= material.name %></td>          
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

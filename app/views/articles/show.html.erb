@@ -1,12 +1,9 @@
 <p style="color: green"><%= notice %></p>
 
 <%= render @article %>
-
-<div>
- <%= link_to "Editar artículo", edit_collection_article_path(@article.collection, @article), method: :get %>
-  
- <%= button_to "Eliminar artículo", collection_article_path(@article.collection, @article), method: :delete %>
-
- <%= link_to "Volver a colección", @collection %>
-
+<br>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+   <%= link_to t('.edit'), edit_collection_article_path(@article.collection, @article), method: :get, class: "btn btn-warning me-md-2"%>
+    <%= button_to t('.delete'), collection_article_path(@article.collection, @article), method: :delete, class: "btn btn-danger me-md-2" %>
 </div>
+
