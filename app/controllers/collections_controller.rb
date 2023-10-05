@@ -25,11 +25,12 @@ class CollectionsController < ApplicationController
   def create
     BonitaApi.login
     process_id = BonitaApi.get_process_id('coleccion')
-    @process_instance = BonitaApi.start_process()
+    @process_instance = BonitaApi.start_process(process_id)
     @collection = Collection.new(collection_params.merge(process_id: process_id, instance_id: @process_instance['id']))
     respond_to do |format|
      
       if @collection.save
+        
         format.html { redirect_to collection_url(@collection), notice: "Collection was successfully created." }
         format.json { render :show, status: :created, location: @collection }
       else
