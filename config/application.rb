@@ -23,5 +23,7 @@ module BApplication
 
     # lenguage by default
     config.i18n.default_locale = :es
+    
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

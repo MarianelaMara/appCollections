@@ -5,7 +5,9 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-    <%= link_to "index", collections_path, class: "btn btn-secondary" %>
+      <% if user_signed_in? %>
+        <%= link_to "index", collections_path, class: "btn btn-secondary" %>
+      <% end %>
       <ul class="navbar-nav ms-auto">
         <% if user_signed_in? %>
           <li class="nav-item">

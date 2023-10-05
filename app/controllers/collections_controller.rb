@@ -23,7 +23,10 @@ class CollectionsController < ApplicationController
 
   # POST /collections or /collections.json
   def create
-    @collection = Collection.new(collection_params)
+    BonitaApi.login
+    process_id = BonitaApi.get_process_id('coleccion')
+    @process_instance = BonitaApi.start_process()
+    @collection = Collection.new(collection_params.merge(process_id: process_id, instance_id: @process_instance['id']))
     respond_to do |format|
      
       if @collection.save

@@ -78,3 +78,4 @@ gem "pundit", "~> 2.2"
 gem "i18n"
 gem "devise-i18n"
 gem 'pg'
+gem 'faraday'
