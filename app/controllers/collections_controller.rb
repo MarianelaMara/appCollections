@@ -3,8 +3,12 @@ class CollectionsController < ApplicationController
   before_action :set_collection, only: %i[ show edit update destroy ]
 
   # GET /collections or /collections.json
-  def index    
-    @collections = Collection.where(owner_id: current_user.id)
+  def index 
+    if Current.user.engineer?
+      @collections = Collection.where(aasm_state: "in_review")
+    elsif Current.user.designer?
+      @collections = Collection.where(owner_id: current_user.id, aasm_state: "started")
+    end 
   end
 
   # GET /collections/1 or /collections/1.json
@@ -23,14 +27,13 @@ class CollectionsController < ApplicationController
 
   # POST /collections or /collections.json
   def create
-    BonitaApi.login
-    process_id = BonitaApi.get_process_id('coleccion')
-    @process_instance = BonitaApi.start_process(process_id)
-    @collection = Collection.new(collection_params.merge(process_id: process_id, instance_id: @process_instance['id']))
+    @collection = Collection.new(collection_params)
     respond_to do |format|
      
       if @collection.save
-        
+      #  BonitaApi.login
+      #  process_id = BonitaApi.get_process_id('coleccion')
+      #  @process_instance = BonitaApi.start_process(process_id)
         format.html { redirect_to collection_url(@collection), notice: "Collection was successfully created." }
         format.json { render :show, status: :created, location: @collection }
       else
@@ -66,6 +69,15 @@ class CollectionsController < ApplicationController
  def all_user
       @collection = Collection.find_by(owner_id: Current.user.id)
  end
+
+ def end_collections  
+ # BonitaApi.login
+ # id_task = BonitaApi.get_task(process_instance)
+ # BonitaApi.end_collections(id_task)
+  @collection = Collection.find( params[:collection_id])
+  @collection.enviar_a_revision
+  redirect_to @collection
+ end 
 
   private
     # Use callbacks to share common setup or constraints between actions.

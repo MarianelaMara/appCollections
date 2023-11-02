@@ -15,16 +15,16 @@
  
 <div class="container mt-4">
   <div class="mb-3">
-    <%= form.label t('.model'), class: "form-label" %>
+    <%= form.label 'Modelo', class: "form-label" %>
     <%= form.text_field :model, class: "form-control form-control-blue-100"  %>
   </div>
   <div class="mb-3">
-    <%= form.label t('.category_id'), class: "form-label", style: "display: block" %>
+    <%= form.label 'Categoría', class: "form-label", style: "display: block" %>
     <%= form.select :category_id, Category.all.pluck(:name, :id), {}, class: "form-control form-control-blue-100" %>
   </div>
 
   <div class="mb-3">
-    <%= form.label t('.description'), class: "form-label" %>
+    <%= form.label 'Descripción', class: "form-label" %>
     <%= form.text_area :description, class: "form-control form-control-blue-100"%>
   </div>
 

@@ -4,5 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  enum role: [:designer, :engineer]
+
   has_many :collections, foreign_key: :owner_id, dependent: :destroy
 end

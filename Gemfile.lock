@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.5.0)
+      concurrent-ruby (~> 1.0)
     actioncable (7.0.5)
       actionpack (= 7.0.5)
       activesupport (= 7.0.5)
@@ -68,7 +70,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
-    base64 (0.1.1)
     bcrypt (3.1.18)
     bindex (0.8.1)
     bootsnap (1.16.0)
@@ -100,11 +101,6 @@ GEM
     devise-i18n (1.11.0)
       devise (>= 4.9.0)
     erubi (1.12.0)
-    faraday (2.7.11)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.14.1)
@@ -189,7 +185,6 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.2.5)
-    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     selenium-webdriver (4.9.1)
       rexml (~> 3.2, >= 3.2.5)
@@ -236,13 +231,13 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aasm
   bootsnap
   capybara
   cssbundling-rails
   debug
   devise
   devise-i18n
-  faraday
   i18n
   jbuilder
   jsbundling-rails

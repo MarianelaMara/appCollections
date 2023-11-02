@@ -16,9 +16,14 @@
     </p>
       </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <%= link_to t('.edit'), edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 
-      <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
-      <%= link_to  t('.add'), new_collection_article_path(@collection), method: :post, class: "btn btn-success me-md-2" %>
+      <% if Current.user.designer? %>
+        <%= link_to t('.edit'), edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 
+        <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
+        <%= link_to  t('.add'), new_collection_article_path(@collection), method: :post, class: "btn btn-success me-md-2" %>
+        <%= button_to 'Enviar a revision', collection_end_collection_path(@collection), method: :get %>
+      <% elsif current_user.engineer? %>
+        <%= link_to  'Aceptar y coplatar', edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 
+      <% end %>
     </div>
       <table class="table table-striped table-hover">
     <thead>
