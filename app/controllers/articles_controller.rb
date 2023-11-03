@@ -40,6 +40,7 @@ class ArticlesController < ApplicationController
   end
 
   # PATCH/PUT /articles/1 or /articles/1.json
+  
   def update
     @collection = Collection.find(params[:collection_id])    
     respond_to do |format|
@@ -71,6 +72,6 @@ class ArticlesController < ApplicationController
     end
 
   def article_params
-    params.require(:article).permit(:model, :description, :category_id, :collection_id, material_ids: [], photos: [])
+    params.require(:article).permit(:model, :description, :category_id, :collection_id, material_ids: [], photos: [], article_materials_attributes: [:id, :quantity, :presupuesto ])
   end
 end

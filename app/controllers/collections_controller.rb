@@ -13,7 +13,11 @@ class CollectionsController < ApplicationController
 
   # GET /collections/1 or /collections/1.json
   def show
-    @collections = Collection.where(owner_id: current_user.id)
+    #@collections = Collection.where(owner_id: current_user.id)
+
+    @collection = Collection.find(params[:id]) # Busca la colección por su id 
+   #@materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id]) # Ejecuta la consulta y guarda el resultado en @materials 
+    @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
   end
 
   # GET /collections/new
@@ -29,7 +33,7 @@ class CollectionsController < ApplicationController
   def create
     @collection = Collection.new(collection_params)
     respond_to do |format|
-     
+     debugger
       if @collection.save
       #  BonitaApi.login
       #  process_id = BonitaApi.get_process_id('coleccion')

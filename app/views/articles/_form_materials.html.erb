@@ -1,0 +1,22 @@
+<%= label_tag do %> 
+    <%= form_with(model:[@collection, @article]) do |f| %>
+        <table class=“table table-striped table-hover”> 
+        <thead> 
+          <tr> 
+            <th>Nombre del material</th> 
+            <th>Cantidad</th> 
+            <th>Presupuesto</th> 
+          </tr> 
+        </thead> 
+      <tbody> 
+      <%= f.fields_for :article_materials do |am| %> 
+        <tr> 
+            <td><%= am.object.material.name %></td> 
+            <td><%= am.number_field :quantity %></td> 
+            <td><%= am.number_field :presupuesto %></td> 
+        </tr> 
+      <% end %>
+      </tbody> 
+      </table> <%= f.submit "Guardar" %> 
+    <% end %> 
+<% end %>

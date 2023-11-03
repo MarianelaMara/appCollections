@@ -29,12 +29,13 @@
         <strong><%= t('.materials') %></strong>
       </p>
     </div>
-    <table class="table table-striped table-hover">
-      <thead>
-        <tr>
-          <th><%=  %></th>
-        </tr>
-      </thead>
+    <% if Current.user.designer? %>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%=  %></th>
+          </tr>
+        </thead>
       <tbody>
         <% article.materials.each do |material| %>
           <tr>
@@ -42,6 +43,9 @@
           </tr>
         <% end %>
       </tbody>
-    </table>
+      </table>
+    <% elsif current_user.engineer? %>
+      <%= render partial: "form_materials", locals: {article: @article} %>
+    <% end %>     
   </div>
 </div>

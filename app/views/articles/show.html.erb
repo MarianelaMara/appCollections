@@ -3,7 +3,12 @@
 <%= render @article %>
 <br>
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-   <%= link_to t('.edit'), edit_collection_article_path(@article.collection, @article), method: :get, class: "btn btn-warning me-md-2"%>
-    <%= button_to t('.delete'), collection_article_path(@article.collection, @article), method: :delete, class: "btn btn-danger me-md-2" %>
+    <div id="collections" class="container mt-4">
+        <% if Current.user.designer? %>
+            <%= link_to t('.edit'), edit_collection_article_path(@article.collection, @article), method: :get, class: "btn btn-warning me-md-2"%>
+            <%= button_to t('.delete'), collection_article_path(@article.collection, @article), method: :delete, class: "btn btn-danger me-md-2" %>
+        <% end %>
+        <%= link_to "volver a coleccion", @collection, class: "btn btn-primary" %>    
+    </div>
 </div>
 
