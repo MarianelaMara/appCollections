@@ -14,7 +14,19 @@
       <strong><%= t('.estimated_release_date') %></strong>
       <%= @collection.estimated_release_date %>
     </p>
-      </div>
+    <% if current_user.engineer? %>
+      <%= form_with(model: @collection, local: true) do |f| %>
+        <div class="field">
+          <strong><%= f.label "Presupuesto de fabricacion:" %></strong>
+          <%= f.number_field :budget %>
+        </div>
+        <div class="actions">
+          <%= f.submit "Guardar" %>
+        </div>
+      <% end %>
+    <% end %>
+
+    </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <% if Current.user.designer? %>
         <%= link_to t('.edit'), edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 

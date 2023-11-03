@@ -17,13 +17,15 @@
           <td>
           <% if Current.user.designer? %>
             <%= link_to t('.delete'), collection, method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
+            <%= link_to t('.editar'), edit_collection_path(collection), class: "btn btn-secondary" %>       
           <% end %>
-          <%= link_to t('.view'), collection, class: "btn btn-primary" %>
-          <%= link_to t('.editar'), edit_collection_path(collection), class: "btn btn-secondary" %>          
+          <%= link_to t('.view'), collection, class: "btn btn-primary" %>   
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <%= link_to t('.new'), new_collection_path, class: "btn btn-success" %>
+  <% if Current.user.designer? %>
+    <%= link_to t('.new'), new_collection_path, class: "btn btn-success" %>
+  <% end %>
 </div>

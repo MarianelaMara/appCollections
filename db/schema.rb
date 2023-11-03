@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_03_003146) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_03_222356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_003146) do
     t.datetime "updated_at", null: false
     t.integer "id_i_bonita"
     t.string "aasm_state"
+    t.decimal "budget"
     t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 

@@ -92,7 +92,7 @@ class CollectionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def collection_params
-      params.require(:collection).permit(:name, :owner_id, :manufacturing_lead_time, :estimated_release_date, articles_attributes: [:id, :model, :category_id, :description]) # permite los atributos de los artículos anidados
+      params.require(:collection).permit(:name, :owner_id, :manufacturing_lead_time, :estimated_release_date, :budget, articles_attributes: [:id, :model, :category_id, :description]) # permite los atributos de los artículos anidados
     end
 
 end
