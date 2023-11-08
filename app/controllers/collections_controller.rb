@@ -31,9 +31,23 @@ class CollectionsController < ApplicationController
 
   # POST /collections or /collections.json
   def create
+    #Se loguea en bonita
+    BonitaApi.login
+    #pide a bonita el id del proceso que esta corriendo en su servidor llamado 'coleccion'
+    #este nombre es el que tiene en el diagrama de procesos
+    process_id = BonitaApi.get_process_id('colection')
+    #con el id inicia una instancia de proceso o caso
+    @process_instance = BonitaApi.start_process(process_id)
+    #pide la proxima tarea del caso
+    @current_task = BonitaApi.current_task(@process_instance)
+    # asigna la tarea 
+    BonitaApi.assigned_task(@current_task)
+    # @collection = Collection.new(collection_params.merge(process_id: process_id, instance_id: @process_instance['id']))
     @collection = Collection.new(collection_params)
+    @collection.id_i_bonita = @process_instance["caseId"]
+   # @collection.save
+
     respond_to do |format|
-     debugger
       if @collection.save
       #  BonitaApi.login
       #  process_id = BonitaApi.get_process_id('coleccion')
@@ -75,13 +89,33 @@ class CollectionsController < ApplicationController
  end
 
  def end_collections  
- # BonitaApi.login
+  BonitaApi.login
  # id_task = BonitaApi.get_task(process_instance)
  # BonitaApi.end_collections(id_task)
   @collection = Collection.find( params[:collection_id])
   @collection.enviar_a_revision
+  #como sabe que esta pendiente la tarea de definir pide la siguiente task del case
+  BonitaApi.current_task(@collection.id_i_bonita)
+  BonitaApi.complete_task(@res)
   redirect_to @collection
- end 
+ end
+
+ def end_revision
+  BonitaApi.login
+  @collection = Collection.find( params[:collection_id])
+  @current_task = BonitaApi.current_task(@collection.id_i_bonita)
+  BonitaApi.assigned_task(@current_task)
+  #seteo variables del proceso
+  # BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
+  # BonitaApi.set_variable("redefinir", "false", "java.lang.Boolean", @collection.id_i_bonita)
+  @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
+  debugger
+  #finalizo la tarea 
+  #@res = BonitaApi.complete_task(@current_task)
+
+  redirect_to @collection
+
+ end
 
   private
     # Use callbacks to share common setup or constraints between actions.
