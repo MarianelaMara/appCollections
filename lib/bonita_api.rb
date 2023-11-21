@@ -14,12 +14,19 @@ module BonitaApi
     end
     
     def self.start_process(process_id)
-      response = @@conn.post("bonita/API/bpm/process/#{process_id}/instantiation")
-      JSON.parse(response.body)
+      # response = @@conn.post("bonita/API/bpm/process/#{process_id}/instantiation")
+      # JSON.parse(response.body)
+
+      responsePost = @@conn.post do |req|
+        req.url "/bonita/API/bpm/case"
+        req.headers['Content-Type'] = 'application/json'
+        req.body = { processDefinitionId: "#{process_id}", variables: [] }.to_json
+      end
+      JSON.parse(responsePost.body)["id"]
     end 
 
     def self.get_process_id(name)
-      response = @@conn.get('bonita/API/bpm/process', f: "name=#{name}", p: 0, c: 1, o: 'version desc', f: 'activationState=ENABLED')
+      response = @@conn.get('bonita/API/bpm/process', f: "name=#{name}", p: 0, c: 1)
       processes = JSON.parse(response.body)
       id = processes.first["id"]
     end

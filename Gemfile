@@ -80,3 +80,5 @@ gem "devise-i18n"
 gem 'pg'
 gem "aasm"
 gem 'faraday'
+gem 'cgi'
+
