@@ -1,0 +1,88 @@
+{
+    "data": {
+        "Makers": [
+            {
+                "id": 3,
+                "name": "Mparts S.R.L.",
+                "country": "Argentina",
+                "city": "La Plata",
+                "address": "Calle 25 de Mayo 5678",
+                "price": "400.0"
+            },
+            {
+                "id": 5,
+                "name": "Ccos S.A.",
+                "country": "Argentina",
+                "city": "City Bell",
+                "address": "Av. San Martín 1234",
+                "price": "600.0"
+            },
+            {
+                "id": 9,
+                "name": "Vid S.A.",
+                "country": "Argentina",
+                "city": "Berazategui",
+                "address": "Ruta 2 Km. 35",
+                "price": "800.0"
+            },
+            {
+                "id": 1,
+                "name": "Muebles S.A.",
+                "country": "Argentina",
+                "city": "City Bell",
+                "address": "Av. San Martín 1234",
+                "price": "100.0"
+            },
+            {
+                "id": 10,
+                "name": "Jewelix",
+                "country": "Italia",
+                "city": "Roma",
+                "address": "Via Roma 1234",
+                "price": "900.0"
+            },
+            {
+                "id": 2,
+                "name": "Glassy",
+                "country": "España",
+                "city": "Madrid",
+                "address": "Calle Mayor 5678",
+                "price": "400.0"
+            },
+            {
+                "id": 8,
+                "name": "Trix",
+                "country": "China",
+                "city": "Shanghai",
+                "address": "No. 8 Huaxia Road",
+                "price": "400.0"
+            },
+            {
+                "id": 6,
+                "name": "Tand",
+                "country": "Estados Unidos",
+                "city": "New York",
+                "address": "100 Main Street",
+                "price": "500.0"
+            },
+            {
+                "id": 7,
+                "name": "Bic S.R.L.",
+                "country": "Argentina",
+                "city": "La Plata",
+                "address": "Calle 25 de Mayo 5678",
+                "price": "400.0"
+            },
+            {
+                "id": 4,
+                "name": "Elrix",
+                "country": "China",
+                "city": "Shanghai",
+                "address": "No. 8 Huaxia Road",
+                "price": "400.0"
+            }
+        ]
+    },
+    "metadata": {},
+    "status": "200"
+}

@@ -1,0 +1,67 @@
+{
+    "data": {
+        "provedores": [
+            {
+                "id": 1,
+                "name": "Maderas S.A.",
+                "country": "Argentina",
+                "address": "Av. San Martín 1234",
+                "city": "City Bell",
+                "provisions": [
+                    {
+                        "id": 1,
+                        "provider_id": 1,
+                        "price": "100.0",
+                        "stock": 30,
+                        "delivery_time": 10,
+                        "material": {
+                            "name": "pino"
+                        }
+                    },
+                    {
+                        "id": 10,
+                        "provider_id": 1,
+                        "price": "100.0",
+                        "stock": 50,
+                        "delivery_time": 10,
+                        "material": {
+                            "name": "pino"
+                        }
+                    },
+                    {
+                        "id": 19,
+                        "provider_id": 1,
+                        "price": "100.0",
+                        "stock": 50,
+                        "delivery_time": 10,
+                        "material": {
+                            "name": "pino"
+                        }
+                    },
+                    {
+                        "id": 28,
+                        "provider_id": 1,
+                        "price": "100.0",
+                        "stock": 50,
+                        "delivery_time": 10,
+                        "material": {
+                            "name": "pino"
+                        }
+                    },
+                    {
+                        "id": 37,
+                        "provider_id": 1,
+                        "price": "100.0",
+                        "stock": 50,
+                        "delivery_time": 10,
+                        "material": {
+                            "name": "pino"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "metadata": {},
+    "status": "200"
+}

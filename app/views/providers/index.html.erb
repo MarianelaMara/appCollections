@@ -1,0 +1,35 @@
+<h1>Proveedores</h1>
+<%= form_with model: @booking, url: bookings_path, method: :post do |form| %>
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>País</th>
+      <th>Dirección</th>
+      <th>Ciudad</th>
+      <th>Materiales</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Demora en entrega</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @providers.each do |provider| %>
+  <% provider["provisions"].each do |provision| %>
+    <tr>
+      <td><%= provider["name"] %></td>
+      <td><%= provider["country"] %></td>
+      <td><%= provider["address"] %></td>
+      <td><%= provider["city"] %></td>
+      <td><%= provision["material"]["name"] %></td>
+      <td><%= provision["price"] %></td>
+      <td><%= provision["stock"] %></td>
+      <td><%= provision["delivery_time"] %> días</td>
+      <td><%= check_box_tag "selected_provisions []", provision["id"] %></td> 
+    </tr>
+  <% end %>
+<% end %>
+  </tbody>
+</table>
+<%= form.submit "Reservar" %> 
+<% end %>

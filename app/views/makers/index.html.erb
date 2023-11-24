@@ -1,0 +1,29 @@
+<h1>Makers</h1>
+<%= form_with model: @booking, url: bookings_path, method: :post do |form| %>
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+  0.
+    <tr>
+      <th>Nombre</th>
+      <th>País</th>
+      <th>Dirección</th>
+      <th>Ciudad</th>
+      <th>Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @makers.each do |maker| %>
+    <tr>
+      <td><%= maker["name"] %></td>
+      <td><%= maker["country"] %></td>
+      <td><%= maker["address"] %></td>
+      <td><%= maker["city"] %></td>
+      <td><%= maker["price"] %></td>
+      <td><%= check_box_tag "selected_makers []", maker["id"] %></td>
+      <td><%= hidden_field_tag "maker_id", maker["id"] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= form.submit "Reservar" %> 
+<% end %>
