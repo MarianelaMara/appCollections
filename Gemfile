@@ -81,4 +81,5 @@ gem 'pg'
 gem "aasm"
 gem 'faraday'
 gem 'cgi'
+gem 'json'
 

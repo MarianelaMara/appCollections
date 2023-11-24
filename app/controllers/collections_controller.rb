@@ -90,24 +90,38 @@ class CollectionsController < ApplicationController
   @collection.enviar_a_revision
   #como sabe que esta pendiente la tarea de definir pide la siguiente task del case
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
-
   BonitaApi.complete_task(@current_task)
   redirect_to root_path
  end
 
  def end_revision
+  require 'json'
   BonitaApi.login
   @collection = Collection.find(params[:collection_id])
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   BonitaApi.assigned_task(@current_task)
+  @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   #seteo variables del proceso
   BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
   BonitaApi.set_variable("redefinir", "false", "java.lang.Boolean", @collection.id_i_bonita)
   @collection.approved
   @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
+  json = {
+    "materials": @materials.map do |h|
+      {
+        "material": h["name"].downcase,
+        "stock": h["total_quantity"],
+        "price": h["max_presupuesto"].to_f,
+        "date": "2023-12-08"
+      }
+    end
+  }.to_json
+  
+
+  
+  BonitaApi.set_variable("consultaMateriales", "#{json}", "java.lang.String", @collection.id_i_bonita)
   #finalizo la tarea 
   BonitaApi.complete_task(@current_task)
-
   redirect_to @collection
  end
 
