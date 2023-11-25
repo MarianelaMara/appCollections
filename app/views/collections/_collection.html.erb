@@ -35,6 +35,7 @@
         <%= button_to 'Enviar a revision', collection_end_collection_path(@collection), method: :get %>
       <% elsif current_user.engineer? %>
       #este delete sacarlo solo lo puse para poder borrar colecciones desde el diseñador
+       <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
         <%= link_to  'No viable', collection_noviable_collection_path(@collection), method: :get, class: "btn btn-danger me-md-2" %> 
         <%= link_to  'Redefinir', collection_redefinir_collection_path(@collection), method: :get, class: "btn btn-warning me-md-2" %> 
         <%= link_to  'Aceptar y completar', collection_end_revision_path(@collection), method: :get, class: "btn btn-success me-md-2" %> 

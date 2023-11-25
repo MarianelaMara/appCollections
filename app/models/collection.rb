@@ -49,6 +49,10 @@ class Collection < ApplicationRecord
       in_review! if self.aasm_state == "started"
   end 
 
+  def enviar_a_redefinir    
+    redefine! if self.aasm_state == "in_review"
+  end 
+
   private
 
   def set_owner

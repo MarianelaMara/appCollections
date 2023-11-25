@@ -7,7 +7,7 @@ class CollectionsController < ApplicationController
     if Current.user.engineer?
       @collections = Collection.where(aasm_state: "in_review")
     elsif Current.user.designer?
-      @collections = Collection.where(owner_id: current_user.id, aasm_state: "started")
+      @collections = Collection.where(owner_id: current_user.id, aasm_state: ["started", "redefine"])
     end 
   end
 
@@ -36,14 +36,11 @@ class CollectionsController < ApplicationController
     BonitaApi.login
     #pide a bonita el id del proceso que esta corriendo en su servidor llamado 'coleccion'
     #este nombre es el que tiene en el diagrama de procesos
-    process_id = BonitaApi.get_process_id('coleccion')    #con el id inicia una instancia de proceso o caso
+    process_id = BonitaApi.get_process_id('coleccion')    
+    #con el id inicia una instancia de proceso o caso
     @process_instance = BonitaApi.start_process(process_id)
-    #pide la proxima tarea del caso
-    @current_task = BonitaApi.current_task(@process_instance)
-    # asigna la tarea 
-    BonitaApi.assigned_task(@current_task)
-    # @collection = Collection.new(collection_params.merge(process_id: process_id, instance_id: @process_instance['id']))
     @collection = Collection.new(collection_params)
+    #se guarda el id del caso en la coleccion
     @collection.id_i_bonita = @process_instance
 
     respond_to do |format|
@@ -72,6 +69,8 @@ class CollectionsController < ApplicationController
 
   # DELETE /collections/1 or /collections/1.json
   def destroy
+    BonitaApi.login
+    BonitaApi.delete_case(@collection.id_i_bonita)
     @collection.destroy
 
     respond_to do |format|
@@ -90,6 +89,7 @@ class CollectionsController < ApplicationController
   @collection.enviar_a_revision
   #como sabe que esta pendiente la tarea de definir pide la siguiente task del case
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
+  BonitaApi.assigned_task(@current_task)
   BonitaApi.complete_task(@current_task)
   redirect_to root_path
  end
@@ -102,8 +102,6 @@ class CollectionsController < ApplicationController
   BonitaApi.assigned_task(@current_task)
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   #seteo variables del proceso
-  BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
-  BonitaApi.set_variable("redefinir", "false", "java.lang.Boolean", @collection.id_i_bonita)
   @collection.approved
   @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
   json = {
@@ -115,11 +113,10 @@ class CollectionsController < ApplicationController
         "date": "2023-12-08"
       }
     end
-  }.to_json
-  
-
-  
+  }.to_json  
   BonitaApi.set_variable("consultaMateriales", "#{json}", "java.lang.String", @collection.id_i_bonita)
+  BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
+  BonitaApi.set_variable("redefinir", "false", "java.lang.Boolean", @collection.id_i_bonita)
   #finalizo la tarea 
   BonitaApi.complete_task(@current_task)
   redirect_to @collection
@@ -147,6 +144,7 @@ class CollectionsController < ApplicationController
   BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
   BonitaApi.set_variable("redefinir", "true", "java.lang.Boolean", @collection.id_i_bonita)
   BonitaApi.complete_task(@current_task)   #finalizo la tarea 
+  @collection.enviar_a_redefinir
   redirect_to root_path
  end
 
