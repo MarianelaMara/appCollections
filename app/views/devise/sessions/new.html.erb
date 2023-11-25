@@ -1,5 +1,5 @@
 <div class= "d-flex justify-content-center">
-  <h2>Iniciae sesión</h2>
+  <h2>Iniciar sesión</h2>
   </div>
 <div class= "d-flex justify-content-center">
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
@@ -12,19 +12,11 @@
       <%= f.label :contraseña %><br />
       <%= f.password_field :password, autocomplete: "current-password" %>
     </div>
-
-    <% if devise_mapping.rememberable? %>
-      <div class="field">
-        <%= f.check_box :remember_me %>
-        <%= f.label :recordar %>
-      </div>
-    <% end %>
-
+    <br>
     <div class="actions">
       <%= f.submit "iniciar sesión" %>
     </div>
   <% end %>
 </div>
 <div class= "d-flex justify-content-center">  
-  <%= render "devise/shared/links" %>
 </div>
