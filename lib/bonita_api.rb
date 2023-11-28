@@ -44,7 +44,7 @@ module BonitaApi
 
     def self.current_task(case_id)
       #con este nos devuelve la tarea de otro casooooooo
-      response = @@conn.get('bonita/API/bpm/task?', f:"=caseId=#{case_id}")
+      #response = @@conn.get('bonita/API/bpm/task?', f:"=caseId=#{case_id}")
       # /API/bpm/userTask?c=10&p=0&f=caseId=1&f=state=ready
       response = @@conn.get('bonita/API/bpm/userTask?', f:"=caseId=#{case_id}&f=state=ready", p: 0, c: 10)
       
@@ -81,6 +81,11 @@ module BonitaApi
         req.headers['Content-Type'] = 'application/json'
         req.body = { type: type, value: value }.to_json
       end
+    end
+
+    def self.get_variable(name, case_id)
+      response = @@conn.get("bonita/API/bpm/caseVariable/#{case_id}/#{name}")
+      opciones = JSON.parse(response.body)
     end
 
       #borra el caso

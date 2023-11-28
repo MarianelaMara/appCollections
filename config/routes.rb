@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get :redefinir_collection , to: 'collections#redefinir_collection'
     resources :articles
   end 
+  post :create_bookings_makers, to: 'bookings#create_bookings_makers'
   resources :makers
   resources :providers
   resources :bookings 

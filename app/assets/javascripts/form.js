@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
       submitButton.disabled = true;
     }
   }
-
   nameField.addEventListener('input', enableSubmitButton);
   manufacturingLeadTimeField.addEventListener('input', enableSubmitButton);
   estimatedReleaseDateField.addEventListener('input', enableSubmitButton);

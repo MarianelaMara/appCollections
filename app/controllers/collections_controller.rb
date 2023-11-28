@@ -1,11 +1,12 @@
 class CollectionsController < ApplicationController
+  require 'json'
   before_action :authenticate_user!
   before_action :set_collection, only: %i[ show edit update destroy ]
 
   # GET /collections or /collections.json
   def index 
     if Current.user.engineer?
-      @collections = Collection.where(aasm_state: "in_review")
+      @collections = Collection.where(aasm_state: ["in_review", "approved", "waiting_to_materials", "waiting_to_makers", "waiting_to_be_completed"])
     elsif Current.user.designer?
       @collections = Collection.where(owner_id: current_user.id, aasm_state: ["started", "redefine"])
     end 
@@ -16,7 +17,6 @@ class CollectionsController < ApplicationController
     #@collections = Collection.where(owner_id: current_user.id)
 
     @collection = Collection.find(params[:id]) # Busca la colección por su id 
-    print "caseeeeeeeeeeeeeeee,}" + @collection.id_i_bonita.to_s
    #@materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id]) # Ejecuta la consulta y guarda el resultado en @materials 
     @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
   end
@@ -95,14 +95,14 @@ class CollectionsController < ApplicationController
  end
 
  def end_revision
-  require 'json'
   BonitaApi.login
   @collection = Collection.find(params[:collection_id])
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   BonitaApi.assigned_task(@current_task)
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
-  #seteo variables del proceso
-  @collection.approved
+  date = @collection.estimated_release_date
+  date -= @collection.manufacturing_lead_time
+  @collection.aprobar_coleccion
   @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
   json = {
     "materials": @materials.map do |h|
@@ -110,16 +110,18 @@ class CollectionsController < ApplicationController
         "material": h["name"].downcase,
         "stock": h["total_quantity"],
         "price": h["max_presupuesto"].to_f,
-        "date": "2023-12-08"
+        "date": date
       }
     end
   }.to_json  
+    #seteo variables del proceso
   BonitaApi.set_variable("consultaMateriales", "#{json}", "java.lang.String", @collection.id_i_bonita)
   BonitaApi.set_variable("viable", "true", "java.lang.Boolean", @collection.id_i_bonita)
   BonitaApi.set_variable("redefinir", "false", "java.lang.Boolean", @collection.id_i_bonita)
   #finalizo la tarea 
   BonitaApi.complete_task(@current_task)
-  redirect_to @collection
+  @collection.esperar_resultados_materiales
+  redirect_to root_path
  end
 
 

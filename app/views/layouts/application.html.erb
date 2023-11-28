@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BApplication</title>
+    <title>AppCollections</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,10 +11,15 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <div class= "ms-5">
+
+    <div class= "ms-5" style="margin-bottom: 50px;">
       <%= render "layouts/navbar" %>
+    </div>
+    <div class= "ms-5" tyle="margin-bottom: 50px;">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+    </div>
+    <div  class= "ms-5">
       <%= yield %>
     </div>
   </body>

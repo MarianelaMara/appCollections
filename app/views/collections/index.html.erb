@@ -20,7 +20,15 @@
             <%= link_to t('.delete'), collection, method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
             <%= link_to t('.editar'), edit_collection_path(collection), class: "btn btn-secondary" %>       
           <% end %>
-          <%= link_to t('.view'), collection, class: "btn btn-primary" %>   
+          <% if current_user.engineer? && collection.aasm_state == 'waiting_to_materials' %>
+            <%= link_to 'Ver proveedores', providers_path(collection_id: collection) , class: "btn btn-success" %>
+            #borrarlos despues para cuando la coleccion espera
+            <%= link_to t('.view'), collection, class: "btn btn-primary" %>  
+          <% elsif current_user.engineer? && collection.aasm_state == 'waiting_to_makers'  %>
+          <%= link_to 'Ver lugares', makers_path(collection_id: collection), class: "btn btn-success" %>      
+          <% else %>
+            <%= link_to t('.view'), collection, class: "btn btn-primary" %>  
+          <% end %>
           </td>
           <td><%= collection.aasm_state %></td>
         </tr>

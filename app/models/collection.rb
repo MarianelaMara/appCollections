@@ -4,7 +4,9 @@ class Collection < ApplicationRecord
   aasm do
     state :started, initial: true
     state :in_review #esperando ser aprobada por el ingeniero que la revisa  
-    state :approved  #ya dispone de los materiales,sus cantidades, el presupuesto de materiales y el de fabricacion
+    state :approved  #aprobada por un ingenieros, es decir es viable y no debe redefinirse
+    state :waiting_to_materials # esperando respuesta de los proveedores de materiales
+    state :waiting_to_makers # esperando respuesta de los lugares de fabricacion
     state :waiting_to_be_completed #esperando ser compleda (que se cumplan todos los vencimientos de las reservas)
     state :redefine #cuando debe redefinirse
     state :finished
@@ -25,8 +27,16 @@ class Collection < ApplicationRecord
       transitions from: :in_review, to: :redefine
     end
 
+    event :waiting_to_materials do
+      transitions from: :approved, to: :waiting_to_materials
+    end
+
+    event :waiting_to_makers do
+      transitions from: :waiting_to_materials, to: :waiting_to_makers
+    end
+
     event :waiting_to_be_completed do
-      transitions from:  :approved, to: :waiting_to_be_completed
+      transitions from:  :waiting_to_makers, to: :waiting_to_be_completed
     end
 
     event :finish do
@@ -51,6 +61,22 @@ class Collection < ApplicationRecord
 
   def enviar_a_redefinir    
     redefine! if self.aasm_state == "in_review"
+  end 
+
+  def aprobar_coleccion 
+    approved! if self.aasm_state == "in_review"
+  end 
+
+  def esperar_resultados_materiales
+    waiting_to_materials! if self.aasm_state == "approved"
+  end 
+
+  def esperar_resultados_lugares
+    waiting_to_makers! if self.aasm_state == "waiting_to_materials"
+  end 
+
+  def esperar_entregas
+    waiting_to_be_completed! if self.aasm_state == "waiting_to_makers"
   end 
 
   private

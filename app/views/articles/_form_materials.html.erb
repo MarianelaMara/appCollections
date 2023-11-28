@@ -12,11 +12,20 @@
       <%= f.fields_for :article_materials do |am| %> 
         <tr> 
             <td><%= am.object.material.name %></td> 
-            <td><%= am.number_field :quantity %></td> 
-            <td><%= am.number_field :presupuesto %></td> 
+            <% if @collection.in_review?  %>
+              <td><%= am.number_field :quantity %></td> 
+              <td><%= am.number_field :presupuesto %></td> 
+            <% else %>
+            <td><%= am.number_field :quantity, disabled:true %></td> 
+            <td><%= am.number_field :presupuesto , disabled:true %></td> 
+            <% end %>
+            
         </tr> 
       <% end %>
       </tbody> 
-      </table> <%= f.submit "Guardar" %> 
+      </table> 
+      <% if @collection.in_review? %>
+        <%= f.submit "Guardar" %> 
+      <% end %> 
     <% end %> 
 <% end %>
