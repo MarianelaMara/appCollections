@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_03_222356) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_05_192349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_222356) do
     t.integer "id_i_bonita"
     t.string "aasm_state"
     t.decimal "budget"
+    t.date "release_date"
     t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 
@@ -87,6 +88,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_222356) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "article_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_order_items_on_article_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.date "date_delivery"
+    t.bigint "collection_id", null: false
+    t.string "customer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "state"
+    t.index ["collection_id"], name: "index_orders_on_collection_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -109,4 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_222356) do
   add_foreign_key "articles", "categories"
   add_foreign_key "articles", "collections"
   add_foreign_key "collections", "users", column: "owner_id"
+  add_foreign_key "order_items", "articles"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "collections"
 end

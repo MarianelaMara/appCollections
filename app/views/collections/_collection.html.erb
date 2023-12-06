@@ -14,15 +14,19 @@
       <strong><%= t('.estimated_release_date') %></strong>
       <%= @collection.estimated_release_date %>
     </p>
-    <% if @collection.waiting_to_be_completed? %>
+    <% if !@collection.revision_coleccion? %>
       <strong><%= "Presupuesto de fabricacion:" %></strong>
       <%= @collection.budget %>
     <% end %>
-    <% if current_user.engineer? && @collection.in_review? %>
+    <% if current_user.engineer? && @collection.revision_coleccion? %>
       <%= form_with(model: @collection, local: true) do |f| %>
         <div class="field">
           <strong><%= f.label "Presupuesto de fabricacion:" %></strong>
           <%= f.number_field :budget %>
+        </div>
+        <div class="field">
+          <strong><%= f.label "Fecha de inicio:" %></strong>
+          <%= f.date_field :release_date %>
         </div>
         <div class="actions">
           <%= f.submit "Guardar" %>
@@ -32,18 +36,18 @@
 
     </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <% if Current.user.designer? %>
+      <% if Current.user.designer? && @collection.definir_coleccion? %>
         <%= link_to t('.edit'), edit_collection_path(@collection), class: "btn btn-warning me-md-2" %> 
         <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
         <%= link_to  t('.add'), new_collection_article_path(@collection), method: :post, class: "btn btn-success me-md-2" %>
         <%= button_to 'Enviar a revision', collection_end_collection_path(@collection), method: :get %>
-      <% elsif current_user.engineer? && !@collection.waiting_to_be_completed? && !@collection.finished? %>
-      #este delete sacarlo solo lo puse para poder borrar colecciones desde el diseñador
-       <%= button_to t('.delete'), @collection, method: :delete, class: "btn btn-danger me-md-2" %>
+      <% elsif current_user.engineer? && @collection.revision_coleccion? %>
+     
         <%= link_to  'No viable', collection_noviable_collection_path(@collection), method: :get, class: "btn btn-danger me-md-2" %> 
         <%= link_to  'Redefinir', collection_redefinir_collection_path(@collection), method: :get, class: "btn btn-warning me-md-2" %> 
         <%= link_to  'Aceptar y completar', collection_end_revision_path(@collection), method: :get, class: "btn btn-success me-md-2" %> 
       <% end %>
+
     </div>
       <table class="table table-striped table-hover">
     <thead>

@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'form' %>
+
 
 <div id="collections" class="container mt-4">
 <%= form_with(model: collection) do |form| %>
@@ -28,8 +28,10 @@
     <%= form.label t('.estimated_release_date'), class: "form-label" %>
     <%= form.date_field :estimated_release_date, class: "form-control form-control-green-100" %>
   </div>
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <%= form.submit "Guardar cambios", class: "btn btn-primary", disabled: true, id: "submit-button" %>
   </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= form.submit "Guardar cambios", class: "btn btn-primary", id: "submit-button" %>
+  </div>
+  
 <% end %>
 </div>

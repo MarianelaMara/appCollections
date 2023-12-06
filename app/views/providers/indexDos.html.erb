@@ -1,0 +1,38 @@
+<h1>Proveedores</h1>
+  <%= form_with model: @booking, url: nueva_bookings_path, method: :post do |form| %>
+    <%= hidden_field_tag :collection_id, collection.id%>
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>País</th>
+        <th>Dirección</th>
+        <th>Ciudad</th>
+        <th>Materiales</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Demora en entrega</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% providers.each do |provider| %>
+      <tr>
+        <td><%= provider["name"] %></td>
+        <td><%= provider["country"] %></td>
+        <td><%= provider["address"] %></td>
+        <td><%= provider["city"] %></td>
+        <td><%= provider["provisions"][0]["material"]["name"] %></td>
+        <td><%= provider["provisions"][0]["price"] %></td>
+        <td><%= provider["provisions"][0]["stock"] %></td>
+        <td><%= provider["provisions"][0]["delivery_time"] %> días</td>
+        <td><%= check_box_tag "selected_provisions[]", provider["provisions"][0].to_json%></td> 
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+  <%= form.submit "Reservar" %> 
+ 
+<% end %>
+<br>
+<br>
+<%= button_to "cancelar coleccion", @collection, method: :delete, class: "btn btn-danger me-md-2" %>

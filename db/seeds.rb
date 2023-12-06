@@ -7,7 +7,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 User.create(email: "d@example.com", password: "123123", role: "designer")
 User.create(email: "e@example.com", password: "123123", role: "engineer")
-
+User.create(email: "m@example.com", password: "123123", role: "marketing")
 
 Category.create(name: "Cocina")
 Category.create(name: "Dormitorio")

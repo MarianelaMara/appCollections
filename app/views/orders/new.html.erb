@@ -1,0 +1,18 @@
+<!-- app/views/orders/new.html.erb -->
+<h1>Nuevo pedido</h1>
+<%= form_with model: @order, url: orders_path, method: :post   do |f| %>
+  <p>
+    <%= f.label :date_delivery, "Fecha de entrega" %>
+    <%= f.date_field :date_delivery %>
+  </p>
+
+  <%= f.hidden_field :collection_id, value: @collection_id %> 
+  <p>
+    <%= f.label :customer, "Cliente" %>
+    <%= f.text_field :customer %>
+  </p>
+  
+  <p>
+    <%= f.submit "Crear pedido" %>
+  </p>
+<% end %>

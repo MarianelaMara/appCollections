@@ -52,6 +52,19 @@ module BonitaApi
       id = task.first["id"]
     end
 
+    def self.next_task(case_id, name)
+      response = @@conn.get('bonita/API/bpm/userTask?', f:"=caseId=#{case_id}&f=state=ready", p: 0, c: 10)     
+      task = JSON.parse(response.body)
+      task.find {|e| e ["name"] == name}
+    end
+
+    def self.search_task(case_id, name)
+      response = @@conn.get('bonita/API/bpm/userTask?', f:"=caseId=#{case_id}&f=state=ready", p: 0, c: 10)     
+      tasksReady = JSON.parse(response.body)
+      task = tasksReady.find {|e| e ["name"] == name}
+      return task["id"]
+    end 
+
     def self.assigned_task(task_id)
       response = @@conn.get('bonita/API/identity/user?', f:"userName=walter.bates")
       user  = JSON.parse(response.body)

@@ -1,0 +1,30 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title"><%= "Reserva atrasada" %></h5>
+    <div class=" justify-content-md-start">
+    <p class="card-text">
+      <strong><%= "Material: " %></strong>
+      <%= booking["material_name"]%>
+    </p>
+    <p class="card-text">
+      <strong><%= "Provedor: " %></strong>
+      <%= booking["provider_id"]%>
+    </p>
+    <p class="card-text">
+      <strong><%= "Precio: " %></strong>
+      <%= booking["price"] %>
+    </p>
+    <p class="card-text">
+      <strong><%= "Se demora : " %></strong>
+      <%= " 5 días" %>
+    </p>
+    
+    </div>
+    <%= link_to "Continuar con el proveedor", continuar_provedor_path(collection_id: collection), class: "btn btn-primary" %> 
+    <br>
+    <%= link_to "Cambiar el proveedor", cambiar_provedor_path(collection_id: collection), class: "btn btn-primary" %>   
+    
+     
+  
+  </div>
+</div>

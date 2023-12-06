@@ -12,7 +12,7 @@ class Collection < ApplicationRecord
     state :finished
 
     event :in_review do
-      transitions from: :started, to: :in_review
+      transitions from: [:started, :waiting_to_materials, :redefine], to: :in_review
     end
 
     event :started do
@@ -48,6 +48,7 @@ class Collection < ApplicationRecord
 
   belongs_to :owner, foreign_key: :owner, class_name: "User", optional: true
   has_many :articles, dependent: :destroy
+  has_many :orders, dependent: :destroy
   scope :by_user, ->(user) { where(owner_id: user.id) }
 
   def owner
@@ -56,7 +57,7 @@ class Collection < ApplicationRecord
 
   def enviar_a_revision
     
-      in_review! if self.aasm_state == "started"
+      in_review! if self.aasm_state == "started" || self.aasm_state == "waiting_to_materials" || self.aasm_state == "redefine"
   end 
 
   def enviar_a_redefinir    
@@ -78,6 +79,65 @@ class Collection < ApplicationRecord
   def esperar_entregas
     waiting_to_be_completed! if self.aasm_state == "waiting_to_makers"
   end 
+
+  def finalizar_coleccion
+    finish! if self.aasm_state == "waiting_to_be_completed"
+  end 
+
+  def pending?
+    BonitaApi.login
+    @pending = BonitaApi.next_task(self.id_i_bonita, 'Analiza si sigue con el provedor')
+    return !@pending.nil?
+  end
+
+  def canceled?
+    BonitaApi.login
+    @canceled = BonitaApi.next_task(self.id_i_bonita, 'Analiza respuesta de material')
+    return !@canceled.nil?
+  end
+
+  def waiting_pedidos?
+    BonitaApi.login
+    @pedidos = BonitaApi.next_task(self.id_i_bonita, 'Recepción de pedidos')
+    return !@pedidos.nil?
+  end
+
+  def waiting_recepcion_lotes?
+    BonitaApi.login
+    @lotes = BonitaApi.next_task(self.id_i_bonita, 'Recepción verificación y asignacion  de lotes')
+    return !@lotes.nil?
+  end
+
+  def analizar_materiales?
+    BonitaApi.login
+    @mate = BonitaApi.next_task(self.id_i_bonita, 'Analiza los materiales disponibles')
+    return !@mate.nil?
+  end
+
+  def analizar_lugares?
+    BonitaApi.login
+    @lug = BonitaApi.next_task(self.id_i_bonita, 'Analiza los posibles lugares de fabricacion')
+    return !@lug.nil?
+  end
+
+  def definir_coleccion?
+    BonitaApi.login
+    @defi = BonitaApi.next_task(self.id_i_bonita, 'Definicion de la coleccion.')
+    return !@defi.nil?
+  end
+
+
+  def revision_coleccion?
+    BonitaApi.login
+    @revi = BonitaApi.next_task(self.id_i_bonita, 'Revision de coleccion')
+    return !@revi.nil?
+  end
+
+  def esperando_lotes?
+    BonitaApi.login
+    @lo = BonitaApi.next_task(self.id_i_bonita, 'Recepción verificación y asignacion  de lotes')
+    return !@lo.nil?
+  end
 
   private
 

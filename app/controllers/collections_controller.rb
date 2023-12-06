@@ -1,21 +1,27 @@
 class CollectionsController < ApplicationController
   require 'json'
-  before_action :authenticate_user!
+  
+  skip_before_action :authenticate_user!, only: :finalizar_coleccion
   before_action :set_collection, only: %i[ show edit update destroy ]
 
   # GET /collections or /collections.json
   def index 
-    if Current.user.engineer?
-      @collections = Collection.where(aasm_state: ["in_review", "approved", "waiting_to_materials", "waiting_to_makers", "waiting_to_be_completed"])
-    elsif Current.user.designer?
-      @collections = Collection.where(owner_id: current_user.id, aasm_state: ["started", "redefine"])
-    end 
+    # if Current.user.engineer? || Current.user.designer?
+    #   @collections = Collection.all
+    # #   @collections = Collection.where(aasm_state: ["in_review", "approved", "waiting_to_materials", "waiting_to_makers", "waiting_to_be_completed"])
+    # # elsif Current.user.designer?
+
+    # #   @collections = Collection.where(owner_id: current_user.id, aasm_state: ["started", "redefine"])
+    # else
+    #   redirect_to orders_path
+    # end 
+    @collections = Collection.all
   end
 
   # GET /collections/1 or /collections/1.json
   def show
+    BonitaApi.login
     #@collections = Collection.where(owner_id: current_user.id)
-
     @collection = Collection.find(params[:id]) # Busca la colección por su id 
    #@materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id]) # Ejecuta la consulta y guarda el resultado en @materials 
     @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
@@ -69,6 +75,7 @@ class CollectionsController < ApplicationController
 
   # DELETE /collections/1 or /collections/1.json
   def destroy
+  
     BonitaApi.login
     BonitaApi.delete_case(@collection.id_i_bonita)
     @collection.destroy
@@ -99,9 +106,7 @@ class CollectionsController < ApplicationController
   @collection = Collection.find(params[:collection_id])
   @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   BonitaApi.assigned_task(@current_task)
-  @current_task = BonitaApi.current_task(@collection.id_i_bonita)
-  date = @collection.estimated_release_date
-  date -= @collection.manufacturing_lead_time
+ # @current_task = BonitaApi.current_task(@collection.id_i_bonita)
   @collection.aprobar_coleccion
   @materials = Material.find_by_sql(["SELECT materials.name, SUM(article_materials.quantity) AS total_quantity, MAX(article_materials.presupuesto) AS max_presupuesto FROM materials JOIN article_materials ON materials.id = article_materials.material_id JOIN articles ON article_materials.article_id = articles.id JOIN collections ON articles.collection_id = collections.id WHERE collections.id = ? GROUP BY materials.name", @collection.id])
   json = {
@@ -110,7 +115,7 @@ class CollectionsController < ApplicationController
         "material": h["name"].downcase,
         "stock": h["total_quantity"],
         "price": h["max_presupuesto"].to_f,
-        "date": date
+        "date": @collection.release_date # es la fecha en la que el ingeniero va a tener el lugar de fabricacion
       }
     end
   }.to_json  
@@ -150,6 +155,17 @@ class CollectionsController < ApplicationController
   redirect_to root_path
  end
 
+ def finalizar_coleccion 
+  @collection = Collection.find_by(id_i_bonita: params[:collection_id])
+  @collection.finalizar_coleccion
+  #render json: "Se finalizo la coleccion", status: :ok
+  respond_to do |format|
+    format.html { redirect_to root_path, notice: "ok" }
+    #format.json { head :no_content }
+    format.json { render :index, status: :ok, location: @collection }
+  end
+ end 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_collection
@@ -159,7 +175,7 @@ class CollectionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def collection_params
-      params.require(:collection).permit(:name, :owner_id, :manufacturing_lead_time, :estimated_release_date, :budget, articles_attributes: [:id, :model, :category_id, :description]) # permite los atributos de los artículos anidados
+      params.require(:collection).permit(:release_date, :name, :owner_id, :manufacturing_lead_time, :estimated_release_date, :budget, articles_attributes: [:id, :model, :category_id, :description]) # permite los atributos de los artículos anidados
     end
 
 end

@@ -1,0 +1,18 @@
+<!-- app/views/order_items/new.html.erb -->
+<h1>Nuevo pedido</h1>
+<%= form_with model: @order_items, url: order_items_path(order_id: @order.id), method: :post   do |f| %>
+  <h2>Artículos</h2>
+  <%= f.fields_for :order_items, @order_items do |o| %>
+    <p>
+      <%= o.label :article_id, "Artículo" %>
+      <%= o.collection_select :article_id, Article.where(collection_id: @order.collection_id), :id, :model %>
+    </p>
+    <p>
+      <%= o.label :quantity, "Cantidad" %>
+      <%= o.number_field :quantity %>
+    </p>
+  <% end %>
+  <p>
+    <%= f.submit "Agregar al pedido" %>
+  </p>
+<% end %>
